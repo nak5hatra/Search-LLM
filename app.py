@@ -8,8 +8,6 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-# os.environ["SERPER_API_KEY"] = os.getenv("SERPER_API_KEY")
-
 ##  Arxiv Tool
 arxiv_wrapper = ArxivAPIWrapper(top_k_results=11, doc_content_chars_max=200)
 arxiv = ArxivQueryRun(api_wrapper=arxiv_wrapper)
@@ -17,15 +15,6 @@ arxiv = ArxivQueryRun(api_wrapper=arxiv_wrapper)
 ##  Wikipedia Tool
 wikipedia_wrapper = WikipediaAPIWrapper(top_k_results=1, doc_content_chars_max=200)
 wikipedia = WikipediaQueryRun(api_wrapper=wikipedia_wrapper)
-
-serper_api_wrapper = GoogleSerperAPIWrapper()
-
-
-search = Tool(
-    name="Google Search",
-    func=serper_api_wrapper.run,
-    description="useful for when you need to search for real-time information from Google."
-)
 
 st.title("LangChain App - Chat and Search")
 
