@@ -4,11 +4,6 @@ from langchain_community.utilities import ArxivAPIWrapper, WikipediaAPIWrapper, 
 from langchain_community.tools import ArxivQueryRun, WikipediaQueryRun, DuckDuckGoSearchRun, Tool
 from langchain.agents import initialize_agent, AgentType, AgentExecutor
 from langchain.callbacks import StreamlitCallbackHandler
-import os
-from dotenv import load_dotenv
-load_dotenv()
-
-# os.environ["SERPER_API_KEY"] = os.getenv("SERPER_API_KEY")
 
 ##  Arxiv Tool
 arxiv_wrapper = ArxivAPIWrapper(top_k_results=11, doc_content_chars_max=200)
