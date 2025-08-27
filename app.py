@@ -8,7 +8,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-os.environ["SERPER_API_KEY"] = os.getenv("SERPER_API_KEY")
+# os.environ["SERPER_API_KEY"] = os.getenv("SERPER_API_KEY")
 
 ##  Arxiv Tool
 arxiv_wrapper = ArxivAPIWrapper(top_k_results=11, doc_content_chars_max=200)
@@ -18,7 +18,6 @@ arxiv = ArxivQueryRun(api_wrapper=arxiv_wrapper)
 wikipedia_wrapper = WikipediaAPIWrapper(top_k_results=1, doc_content_chars_max=200)
 wikipedia = WikipediaQueryRun(api_wrapper=wikipedia_wrapper)
 
-##  DuckDuckGo Search
 serper_api_wrapper = GoogleSerperAPIWrapper()
 
 
@@ -38,6 +37,16 @@ st.title("LangChain App - Chat and Search")
 ##  Sidebar for Settings
 st.sidebar.title("Settings")
 api_key = st.sidebar.text_input("Enter your Groq API Key:", type="password")
+serper_api_key = st.sidebar.text_input("Enter your serper API Key:", type="password")
+
+serper_api_wrapper = GoogleSerperAPIWrapper(serper_api_key=serper_api_key)
+
+
+search = Tool(
+    name="Google Search",
+    func=serper_api_wrapper.run,
+    description="useful for when you need to search for real-time information from Google."
+)
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
