@@ -4,6 +4,11 @@ from langchain_community.utilities import ArxivAPIWrapper, WikipediaAPIWrapper, 
 from langchain_community.tools import ArxivQueryRun, WikipediaQueryRun, DuckDuckGoSearchRun, Tool
 from langchain.agents import initialize_agent, AgentType, AgentExecutor
 from langchain.callbacks import StreamlitCallbackHandler
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+# os.environ["SERPER_API_KEY"] = os.getenv("SERPER_API_KEY")
 
 ##  Arxiv Tool
 arxiv_wrapper = ArxivAPIWrapper(top_k_results=11, doc_content_chars_max=200)
@@ -32,16 +37,8 @@ st.title("LangChain App - Chat and Search")
 ##  Sidebar for Settings
 st.sidebar.title("Settings")
 api_key = st.sidebar.text_input("Enter your Groq API Key:", type="password")
-serper_api_key = st.sidebar.text_input("Enter your serper API Key:", type="password")
+se_api_key = st.sidebar.text_input("Enter your serper API Key:", type="password")
 
-serper_api_wrapper = GoogleSerperAPIWrapper(serper_api_key=serper_api_key)
-
-
-search = Tool(
-    name="Google Search",
-    func=serper_api_wrapper.run,
-    description="useful for when you need to search for real-time information from Google."
-)
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
@@ -57,6 +54,15 @@ for msg in st.session_state.messages:
 if prompt:=st.chat_input(placeholder="Ask me Anything! 🤗"):
     st.session_state.messages.append({"role": "user","content":prompt})
     st.chat_message("user").write(prompt)
+    
+    serper_api_wrapper = GoogleSerperAPIWrapper(serper_api_key=se_api_key)
+
+
+    search = Tool(
+        name="Google Search",
+        func=serper_api_wrapper.run,
+        description="useful for when you need to search for real-time information from Google."
+    )
     
     llm = ChatGroq(groq_api_key=api_key, model_name="Llama3-8b-8192", streaming=True)
     
